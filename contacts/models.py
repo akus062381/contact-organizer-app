@@ -22,9 +22,12 @@ class Contact(models.Model):
     zip_code = USZipCodeField(null=True, blank=True)
 
 class Note(models.Model):
-    note = models.ForeignKey(to=Contact, on_delete=models.CASCADE)
-    text = models.CharField(max_length=255)
+    note = models.ForeignKey(to=Contact, on_delete=models.CASCADE, related_name="add_notes")
+    text = models.TextField(max_length=255, null=True, blank=True)
     date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+
+    def __str__(self):
+        return self.text
 
 
 

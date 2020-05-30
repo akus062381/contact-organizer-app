@@ -24,8 +24,10 @@ def add_contact(request):
 
 def show_contacts(request, pk):
     contact = get_object_or_404(Contact, pk=pk)
+    note_form = NoteForm()
     return render(request, 'contacts/show_contacts.html', {
-        "contact": contact
+        "contact": contact,
+        "form": note_form
     })
 
 
@@ -36,8 +38,10 @@ def add_note(request, pk):
     else:
         form = NoteForm(data=request.POST, instance=contact)
         if form.is_valid():
-            form.save()
-            return redirect(to='list_contacts')
+            note = form.save(commit=False)
+            note.note = contact
+            note.save()
+            return redirect(to='show_contacts', pk=pk)
 
     return render(request, "contacts/add_note.html", {"form": form, "contact": contact})
 
