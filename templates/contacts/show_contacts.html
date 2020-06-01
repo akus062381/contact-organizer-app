@@ -35,25 +35,24 @@
     </div>
     {% endif %}
 
+    
+    <div class="p13 pb3">
+        <form action="{% url 'add_note' pk=contact.pk %}" method='POST'>
+            {% csrf_token %}
+            {{ note_form.as_p }}
+            <div>
+                <button type="submit">Create Note</button>
+            </div>
+        </form>
+    </div>
+    
     <div class="pb2">
-      {% for note in note.add_notes.all %}
-      <div class="pr2"><i class="icofont-note"></i></div>
+      {% for note in contact.add_notes.all %}
+      <!-- <div class="pr2"><i class="icofont-note"></i></div> -->
       <div>{{ note.text }}</div>
       <div>{{ note.date }}</div>
       {% endfor %}
     </div>
-
-    <div class="p13 pb3">
-        <strong><a href="{% url 'add_note' pk=contact.pk %}">Notes</a></strong>
-        <form action="{% url 'add_note' pk=contact.pk %}" method='POST'>
-          {% csrf_token %}
-          {{ form.as_p }}
-          <div>
-            <button type="submit">Create Note</button>
-          </div>
-        </form>
-      </div>
-
     <p>
       <a href="{% url 'list_contacts' %}">Go Back</a><br>
       <a href="{% url 'edit_contact' pk=contact.pk %}">Edit Contact</a><br>    

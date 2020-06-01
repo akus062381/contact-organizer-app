@@ -24,26 +24,27 @@ def add_contact(request):
 
 def show_contacts(request, pk):
     contact = get_object_or_404(Contact, pk=pk)
-    note_form = NoteForm()
+    form = NoteForm()
     return render(request, 'contacts/show_contacts.html', {
         "contact": contact,
-        "form": note_form
+        "note_form": form
     })
 
 
 def add_note(request, pk):
     contact = get_object_or_404(Contact, pk=pk)
-    if request.method == 'GET':
-        form = NoteForm(instance=contact)
-    else:
-        form = NoteForm(data=request.POST, instance=contact)
-        if form.is_valid():
-            note = form.save(commit=False)
-            note.note = contact
-            note.save()
-            return redirect(to='show_contacts', pk=pk)
+    
+    form = NoteForm(data=request.POST)
+    if form.is_valid():
+        note = form.save(commit=False)
+        note.contact = contact
+        note.save()
+        return redirect(to='show_contacts', pk=pk)
 
-    return render(request, "contacts/add_note.html", {"form": form, "contact": contact})
+    return render(request, "contacts/show_contacts.html", {
+        "note_form": form, 
+        "contact": contact
+    })
 
 def edit_contact(request, pk):
     contact = get_object_or_404(Contact, pk=pk)
